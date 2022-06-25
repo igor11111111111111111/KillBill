@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//namespace KillBill
-//{
+namespace KillBill
+{
     public class Player : MonoBehaviour
     {
-        [SerializeField] private SliceTester _cuttingEdge;
+        //[SerializeField] private PlayerAnimationsEvents _playerAnimationsEvents;
+        //[SerializeField] private SliceTester _sliceTester;
 
-        /// throw in animator event script
-        /// or using time animation
-
-        public void AnimationEventAttack(/*bool active*/)
-        {
-            //_cuttingEdge.gameObject.SetActive(active);
-        }
+        //private void Awake()
+        //{
+        //    _playerAnimationsEvents.Init(_sliceTester);
+        //}
     }
+}
+
+

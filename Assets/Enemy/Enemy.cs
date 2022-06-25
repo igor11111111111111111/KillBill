@@ -2,13 +2,14 @@
 
 public class Enemy : MonoBehaviour
 {
-    public SkeletonMeshSlicer Skeleton;
-    [HideInInspector] public SkinnedMeshRenderer SkinnedMeshRenderer;
-    [HideInInspector] public Animator Animator;
+    public static Enemy Instance;
+    public SkinnedMeshRenderer SkinnedMeshRenderer;
 
     private void Awake()
     {
-        Animator = GetComponentInChildren<Animator>();
-        SkinnedMeshRenderer = Skeleton.GetComponent<SkinnedMeshRenderer>();
+        var collider = GetComponent<MeshCollider>();
+        var mesh = new Mesh();
+        SkinnedMeshRenderer.BakeMesh(mesh, false);
+        collider.sharedMesh = mesh;
     }
 }

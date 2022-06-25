@@ -8,8 +8,8 @@ public class SeveredLimb : MonoBehaviour
     {
         transform.SetParent(go.transform);
 
-        _rigidBody = gameObject.TryGetComponent(out Rigidbody rigidbody)
-            ? rigidbody
-            : gameObject.AddComponent<Rigidbody>();
+        //_rigidBody = gameObject.TryGetComponent(out Rigidbody rigidbody)
+        //    ? rigidbody
+        //    : gameObject.AddComponent<Rigidbody>();
     }
 } 

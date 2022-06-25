@@ -295,7 +295,7 @@ public class SkeletonMeshSlicer : MonoBehaviour
         void SliceBonesColliders()
         {
             foreach (var bone in sectionsBones)
-            {
+            { 
                 Collider[] cols = bone.GetComponents<Collider>();
                 if (cols.Length > 0)
                 {   
