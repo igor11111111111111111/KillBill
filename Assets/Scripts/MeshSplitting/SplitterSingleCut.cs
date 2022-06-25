@@ -5,11 +5,23 @@ namespace MeshSplitting
 {
     public class SplitterSingleCut : MonoBehaviour
     {
+        private bool _canSlice = false;
+
+        private void OnEnable()
+        {
+            _canSlice = true;
+        }
+
+        private void OnDisable()
+        {
+            _canSlice = false;
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out Splitable splitable))
+            if (_canSlice && other.TryGetComponent(out Splitable splitable))
             {
-                Debug.Log("da");
+                _canSlice = false;
                 splitable.Split(transform);
             }
         }
