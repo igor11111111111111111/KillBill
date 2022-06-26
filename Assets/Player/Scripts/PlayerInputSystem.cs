@@ -19,10 +19,10 @@ namespace KillBill
         {
             Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
-            if (moveDirection != _oldDirection)
-            {
+            //if (moveDirection != _oldDirection)
+            //{
                 OnMove?.Invoke(moveDirection);
-            }
+            //}
 
             _oldDirection = moveDirection;
         }

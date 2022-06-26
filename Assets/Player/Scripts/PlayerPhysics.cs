@@ -1,27 +1,26 @@
 using UnityEngine;
 
-namespace MeshSplitting.Demo
+namespace KillBill
 {
-    [AddComponentMenu("Player/RigidMotor")]
-    [RequireComponent(typeof(Rigidbody))]
-    public class RigidMotor : MonoBehaviour
+    public class PlayerPhysics
     {
         public float Speed = 10f;
-
         private Rigidbody _rigidbody;
-        [SerializeField] private Transform _rigidMotorTarget;
+        private Transform _rigidMotorTarget;
 
-        private void Awake()
+        public PlayerPhysics(Rigidbody rigidbody, Transform target, PlayerController playerController)
         {
-            _rigidbody = GetComponent<Rigidbody>();
+            _rigidbody = rigidbody;
+            _rigidMotorTarget = target;
+
             _rigidbody.freezeRotation = true;
             _rigidbody.useGravity = false;
+
+            playerController.OnMove += Move;
         }
 
-        private void FixedUpdate()
+        private void Move(Vector3 moveDirection)
         {
-            Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
             Vector3 targetVelocity = _rigidMotorTarget.TransformDirection(moveDirection) * Speed;
             Vector3 changeVelocity = targetVelocity - _rigidbody.velocity;
             changeVelocity.y = 0f;

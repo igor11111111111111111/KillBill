@@ -1,29 +1,32 @@
 ﻿using MeshSplitting.Splitables;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MeshSplitting
 {
     public class SplitterSingleCut : MonoBehaviour
     {
-        private bool _canSlice = false;
+        private List<Splitable> _splitables = new List<Splitable>();
 
         private void OnEnable()
         {
-            _canSlice = true;
+            _splitables.Clear();
         }
 
         private void OnDisable()
         {
-            _canSlice = false;
+            foreach (var splitable in _splitables)
+            {
+                if(splitable)
+                    splitable.Split(transform);
+            }
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (_canSlice && other.TryGetComponent(out Splitable splitable))
-            {
-                _canSlice = false;
-                splitable.Split(transform);
-            }
+            other.TryGetComponent(out Splitable splitable);
+            if (splitable && !_splitables.Contains(splitable))
+                _splitables.Add(splitable);
         }
     }
 }

@@ -71,7 +71,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4671638874818902982}
   - component: {fileID: 4032687534663275275}
-  - component: {fileID: 159228235723706173}
   m_Layer: 0
   m_Name: Nightshade
   m_TagString: Untagged
@@ -213,14 +212,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.0034170449, y: -0.1391033, z: -0.009403914}
     m_Extent: {x: 0.96237195, y: 1.2223915, z: 0.25147972}
   m_DirtyAABB: 0
---- !u!33 &159228235723706173
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 159228235723706162}
-  m_Mesh: {fileID: 4770535541904122835, guid: a54ed2e8a12f8d744b22ac11eb841c43, type: 3}
 --- !u!1 &205871584686220047
 GameObject:
   m_ObjectHideFlags: 0
@@ -1966,10 +1957,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7595123364788448110}
+  - component: {fileID: 7074201571550851536}
   - component: {fileID: 7074201571550851542}
   - component: {fileID: 7074201571550851543}
   - component: {fileID: 7074201571550851537}
-  - component: {fileID: 7074201571550851536}
+  - component: {fileID: 440255383709604002}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -1992,6 +1984,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7074201571550851536
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7074201571550851540}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.9921737, y: 22.151217, z: 5.617004}
+  m_Center: {x: 0.084341764, y: 11.443233, z: -0.22197175}
 --- !u!64 &7074201571550851542
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2014,9 +2019,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7074201571550851540}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Mass: 100
+  m_Drag: 0.5
+  m_AngularDrag: 0.5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -2034,33 +2039,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8126f3a728c5be847adebce1342d9c8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OptionalTargetObject: {fileID: 0}
-  Convex: 0
-  SplitForce: 0
-  CreateCap: 1
-  UseCapUV: 0
-  CustomUV: 0
-  CapUVMin: {x: 0, y: 0}
-  CapUVMax: {x: 1, y: 1}
-  ForceNoBatching: 0
-  _skinnedMeshRenderer:
-  - {fileID: 4032687534663275275}
-  _meshFilter: []
-  _animator: {fileID: 7761931226967781337}
-  _boxCollider: {fileID: 7074201571550851536}
---- !u!65 &7074201571550851536
-BoxCollider:
+--- !u!114 &440255383709604002
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7074201571550851540}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4.9921737, y: 22.151217, z: 5.617004}
-  m_Center: {x: 0.084341764, y: 11.443233, z: -0.22197175}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fa7502faa701d045abd824fa2c43325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skinnedMeshRenderer: {fileID: 4032687534663275275}
+  _animator: {fileID: 7761931226967781337}
+  _splitable: {fileID: 7074201571550851537}
 --- !u!1 &7733464146985542821
 GameObject:
   m_ObjectHideFlags: 0

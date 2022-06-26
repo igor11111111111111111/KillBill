@@ -8,29 +8,28 @@ namespace MeshSplitting.Splitables
     [AddComponentMenu("Mesh Splitting/Splitable")]
     public class Splitable : MonoBehaviour
     {
-        public GameObject OptionalTargetObject;
-        public bool Convex = false;
-        public float SplitForce = 0f;
+        private GameObject OptionalTargetObject;
+        private bool Convex = false;
 
-        public bool CreateCap = true;
-        public bool UseCapUV = false;
-        public bool CustomUV = false;
-        public Vector2 CapUVMin = Vector2.zero;
-        public Vector2 CapUVMax = Vector2.one;
-
-        public bool ForceNoBatching = false;
+        private bool CreateCap = true;
+        private bool UseCapUV = false;
+        private bool CustomUV = false;
+        private Vector2 CapUVMin = Vector2.zero;
+        private Vector2 CapUVMax = Vector2.one;
 
         private PlaneMath _splitPlane;
-        private MeshContainer[] _meshContainerStatic;
-        private IMeshSplitter[] _meshSplitterStatic;
         private MeshContainer[] _meshContainerSkinned;
         private IMeshSplitter[] _meshSplitterSkinned;
 
         private bool _isSplitting = false;
-        [SerializeField] private SkinnedMeshRenderer[] _skinnedMeshRenderer;
-        [SerializeField] private MeshFilter[] _meshFilter;
-        [SerializeField] private Animator _animator;
-        [SerializeField] private BoxCollider _boxCollider;
+        private SkinnedMeshRenderer _skinnedMeshRenderer;
+        private Animator _animator;
+
+        public void Init(SkinnedMeshRenderer skinnedMeshRenderer, Animator animator)
+        {
+            _skinnedMeshRenderer = skinnedMeshRenderer;
+            _animator = animator;
+        }
 
         public void Split(Transform splitTransform)
         {
@@ -39,27 +38,14 @@ namespace MeshSplitting.Splitables
                 _animator.enabled = false;
                 var collider = GetComponent<MeshCollider>();
                 var mesh = new Mesh();
-                _skinnedMeshRenderer[0].BakeMesh(mesh, false);
+                _skinnedMeshRenderer.BakeMesh(mesh, false);
                 collider.sharedMesh = mesh;
 
                 _isSplitting = true;
                 _splitPlane = new PlaneMath(splitTransform);
 
-                MeshFilter[] meshFilters = _meshFilter;
-                SkinnedMeshRenderer[] skinnedRenderes = _skinnedMeshRenderer;
-
-                _meshContainerStatic = new MeshContainer[meshFilters.Length];
-                _meshSplitterStatic = new IMeshSplitter[meshFilters.Length];
-
-                for (int i = 0; i < meshFilters.Length; i++)
-                {
-                    _meshContainerStatic[i] = new MeshContainer(meshFilters[i]);
-
-                    _meshSplitterStatic[i] = Convex ? (IMeshSplitter)new MeshSplitterConvex(_meshContainerStatic[i], _splitPlane, splitTransform.rotation) :
-                                                      (IMeshSplitter)new MeshSplitterConcave(_meshContainerStatic[i], _splitPlane, splitTransform.rotation);
-
-                    if (UseCapUV) _meshSplitterStatic[i].SetCapUV(UseCapUV, CustomUV, CapUVMin, CapUVMax);
-                }
+                SkinnedMeshRenderer[] skinnedRenderes = new SkinnedMeshRenderer[1]
+                { _skinnedMeshRenderer };
 
                 _meshSplitterSkinned = new IMeshSplitter[skinnedRenderes.Length];
                 _meshContainerSkinned = new MeshContainer[skinnedRenderes.Length];
@@ -76,20 +62,6 @@ namespace MeshSplitting.Splitables
             }
 
             bool anySplit = false;
-
-            for (int i = 0; i < _meshContainerStatic.Length; i++)
-            {
-                _meshContainerStatic[i].MeshInitialize();
-                _meshContainerStatic[i].CalculateWorldSpace();
-
-                _meshSplitterStatic[i].MeshSplit();
-
-                if (_meshContainerStatic[i].IsMeshSplit())
-                {
-                    anySplit = true;
-                    if (CreateCap) _meshSplitterStatic[i].MeshCreateCaps();
-                }
-            }
 
             for (int i = 0; i < _meshContainerSkinned.Length; i++)
             {
@@ -151,43 +123,6 @@ namespace MeshSplitting.Splitables
 
         private void UpdateMeshesInChildren(int i, GameObject go)
         {
-            if (_meshContainerStatic.Length > 0)
-            {
-                MeshFilter[] meshFilters = go.transform.GetChild(0).GetComponentsInChildren<MeshFilter>();
-                for (int j = 0; j < _meshContainerStatic.Length; j++)
-                {
-                    Renderer renderer = meshFilters[j].GetComponent<Renderer>();
-                    if (ForceNoBatching)
-                    {
-                        renderer.materials = renderer.materials;
-                    }
-                    if (i == 0)
-                    {
-                        if (_meshContainerStatic[j].HasMeshUpper() & _meshContainerStatic[j].HasMeshLower())
-                        {
-                            meshFilters[j].mesh = _meshContainerStatic[j].CreateMeshUpper();
-                        }
-                        else if (!_meshContainerStatic[j].HasMeshUpper())
-                        {
-                            if (renderer != null) Destroy(renderer);
-                            Destroy(meshFilters[j]);
-                        }
-                    }
-                    else
-                    {
-                        if (_meshContainerStatic[j].HasMeshUpper() & _meshContainerStatic[j].HasMeshLower())
-                        {
-                            meshFilters[j].mesh = _meshContainerStatic[j].CreateMeshLower();
-                        }
-                        else if (!_meshContainerStatic[j].HasMeshLower())
-                        {
-                            if (renderer != null) Destroy(renderer);
-                            Destroy(meshFilters[j]);
-                        }
-                    }
-                }
-            }
-
             if (_meshContainerSkinned.Length > 0)
             {
                 SkinnedMeshRenderer[] skinnedRenderer = go.transform.GetChild(0).GetComponentsInChildren<SkinnedMeshRenderer>();
